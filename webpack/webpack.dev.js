@@ -1,7 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require('dotenv-webpack');
-const CopyPlugin = require("copy-webpack-plugin");
+const { InjectManifest } = require('workbox-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: "development",
@@ -13,8 +14,11 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, "../public"),
     hot: true,
-    port: 5555,
+    port: process.env.PORT || 7878,
     open: true,
+    client: {
+      overlay: false,
+    },
     proxy: [
       {
         context: ['/v1'],
@@ -30,10 +34,12 @@ module.exports = {
       filename: "index.html",
     }),
     new Dotenv(),
+    new InjectManifest({
+      swSrc: "./src/webpush-sw.js",
+      swDest: "webpush-sw.js",
+    }),
     new CopyPlugin({
-      patterns: [
-        { from: 'src/webpush-sw.js', to: 'webpush-sw.js' },
-      ],
+      patterns: [{ from: 'public/offline.html', to: '' }],
     }),
   ],
   module: {

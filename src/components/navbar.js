@@ -7,6 +7,9 @@ export default function Navbar() {
         <button class="navbar-toggle" aria-label="Toggle menu">☰</button>
         <div class="navbar-right hidden" id="mobile-menu">
           <a href="#add-story" class="nav-link" id="add-story-btn">Tambah Sejarah</a>
+          <button id="notification-btn" class="notification-btn">
+            <i class="fas fa-bell"></i>
+          </button>
           <a href="#logout" class="nav-link" id="logout-btn">Logout</a>
         </div>
       </nav>

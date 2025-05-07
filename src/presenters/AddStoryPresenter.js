@@ -88,12 +88,13 @@ export default class AddStoryPresenter {
 
     async function sendPushNotification(storyDescription) {
       try {
+        console.log('[DEBUG] Memeriksa flag...');
         const alreadyNotified = await getFlag('notified');
-        if (alreadyNotified) {
-          console.log('⚠️ Notifikasi sudah pernah ditampilkan.');
-          return;
-        }
-    
+        console.log('[DEBUG] alreadyNotified:', alreadyNotified);
+
+        await setFlag('notified', true);
+        console.log('[DEBUG] Flag "notified" diset ke true');
+
         const registration = await navigator.serviceWorker.ready;
         const title = 'Story berhasil dibuat';
         const options = {
@@ -104,15 +105,14 @@ export default class AddStoryPresenter {
           tag: 'story-created',
           renotify: false,
         };
-    
+
         await registration.showNotification(title, options);
-        await setFlag('notified', true);
         console.log('✅ Notifikasi lokal ditampilkan.');
       } catch (err) {
         console.error('❌ Gagal menampilkan notifikasi lokal:', err);
       }
-    }    
-    
+    }
+
     document.getElementById('add-story-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const description = document.getElementById('description').value;

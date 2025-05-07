@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import StoryModel from '../models/StoryModel';
+import { cacheStories, getCachedStories } from '../utils/db';
 
 const customIcon = L.divIcon({
   html: `
@@ -34,13 +35,13 @@ export async function renderLeafletMap(containerId = 'map') {
   );
 
   const mapTiler = L.tileLayer(
-    `https://api.maptiler.com/maps/toner/{z}/{x}/{y}.png?key=${process.env.MAPTILER_API_KEY}`, 
+    `https://api.maptiler.com/maps/toner/{z}/{x}/{y}.png?key=${process.env.MAPTILER_API_KEY}`,
     {
       attribution: '© MapTiler',
       tileSize: 512,
       zoomOffset: -1,
     }
-  );  
+  );
 
   const baseLayers = {
     OpenStreetMap: osm,
@@ -73,7 +74,22 @@ export async function renderLeafletMap(containerId = 'map') {
   L.control.layers(baseLayers).addTo(map);
   L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
-  const stories = await StoryModel.getStoriesWithLocation();
+  let stories = [];
+
+  try {
+    stories = await StoryModel.getStoriesWithLocation();
+    await cacheStories(stories);
+  } catch (err) {
+    console.warn('⚠️ Gagal fetch dari API:', err.message);
+    const cached = await getCachedStories('cachedStoriesWithLocation');
+    if (Array.isArray(cached) && cached.length > 0) {
+      stories = cached;
+    } else {
+      console.error('🛑 Tidak ada cache stories tersedia.');
+      return;
+    }
+  }  
+
   const markerMap = new Map();
 
   stories.forEach((story) => {

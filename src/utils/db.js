@@ -36,3 +36,20 @@ export async function clearFlag(key) {
   tx.objectStore(STORE_NAME).delete(key);
   return tx.complete;
 }
+
+export async function cacheStories(stories, key = 'cachedStories') {
+  const db = await openDB();
+  const tx = db.transaction('flags', 'readwrite');
+  tx.objectStore('flags').put(stories, key);
+  return tx.complete;
+}
+
+export async function getCachedStories(key = 'cachedStories') {
+  const db = await openDB();
+  const tx = db.transaction('flags', 'readonly');
+  const result = await tx.objectStore('flags').get(key);
+  if (!result) return [];
+  if (Array.isArray(result)) return result;
+  if (typeof result === 'object' && result.listStory) return result.listStory;
+  return [];
+}

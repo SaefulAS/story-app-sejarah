@@ -69,7 +69,7 @@ export default class StoryListView {
         emptyMessage.style.color = '#777';
         emptyMessage.style.gridColumn = '1 / -1';
         this.grid.appendChild(emptyMessage);
-        this.pagination.innerHTML = ''; // Kosongkan pagination juga
+        this.pagination.innerHTML = '';
         this.grid.classList.remove('fade');
         return;
       }

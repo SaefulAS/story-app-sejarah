@@ -1,90 +1,123 @@
-self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
-  event.waitUntil(
-    caches.open('story-cache').then(async (cache) => {
-      const filesToCache = ['/index.html'];
+import { precacheAndRoute, matchPrecache } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { ExpirationPlugin } from 'workbox-expiration';
 
-      for (const file of filesToCache) {
-        try {
-          await cache.add(file);
-          console.log(`✅ Cached: ${file}`);
-        } catch (error) {
-          console.error(`❌ Failed to cache: ${file}`, error);
-        }
+precacheAndRoute(self.__WB_MANIFEST);
+
+const url = new URL(self.location.href);
+if (url.port !== '7878') {
+  console.warn('❌ SW not allowed on this port:', url.port);
+  self.skipWaiting();
+  self.close();
+} else {
+
+  registerRoute(
+    ({ request, url }) =>
+      request.mode === 'navigate' ||
+      url.pathname === '/' ||
+      url.hash.startsWith('#'), 
+    async ({ event }) => {
+      try {
+        return await fetch(event.request);
+      } catch {
+        return await matchPrecache('/offline.html');
       }
+    }
+  );
+
+  // ⚙️ Cache JS & CSS
+  registerRoute(
+    ({ request }) => ['script', 'style'].includes(request.destination),
+    new StaleWhileRevalidate({ cacheName: 'static-resources' })
+  );
+
+  // 🖼️ Cache gambar (di server sendiri)
+  registerRoute(
+    ({ request }) => request.destination === 'image',
+    new CacheFirst({
+      cacheName: 'image-cache',
+      plugins: [new ExpirationPlugin({ maxEntries: 50 })],
     })
   );
-});
 
-self.addEventListener('activate', (event) => {
-  console.log('Service Worker activated...');
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== 'story-cache') {
-            return caches.delete(cacheName);
-          }
-        })
-      );
+  // 📷 Cache gambar dari story-api (Dicoding)
+  registerRoute(
+    ({ url }) =>
+      url.origin === 'https://story-api.dicoding.dev' &&
+      url.pathname.startsWith('/images/stories/'),
+    new CacheFirst({
+      cacheName: 'dicoding-story-images',
+      plugins: [
+        new CacheableResponsePlugin({ statuses: [0, 200] }),
+        new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }),
+      ],
     })
   );
-});
 
-self.addEventListener('push', (event) => {
-  console.log('[SW] Push event received:', event);
+  registerRoute(
+    ({ url }) =>
+      url.origin === self.location.origin &&
+      url.pathname.startsWith('/stories'),
+    new NetworkFirst({
+      cacheName: 'stories-api-cache',
+      plugins: [
+        new CacheableResponsePlugin({ statuses: [0, 200] }),
+        new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 }),
+      ],
+    })
+  );
 
-  if (event.data) {
-    const pushData = event.data.text();
-    console.log('[SW] Received push data as text:', pushData);
-
-    try {
-      const notificationData = JSON.parse(pushData);
-      console.log('[SW] Push notification data:', notificationData);
-
-      event.waitUntil(
-        self.registration.showNotification(
-          notificationData.title || '',
-          {
+  // Push Notification
+  self.addEventListener('push', (event) => {
+    if (event.data) {
+      const pushData = event.data.text();
+      try {
+        const notificationData = JSON.parse(pushData);
+        event.waitUntil(
+          self.registration.showNotification(notificationData.title || '', {
             ...notificationData.options,
             tag: 'story-push',
             renotify: false,
             requireInteraction: false,
-            data: {
-              link: '/#home'
-            }
-          }
-        )
-      );
-    } catch (e) {
-      console.warn('[SW] Failed to parse push data as JSON:', e);
-      event.waitUntil(self.registration.showNotification('Notification', {
-        body: pushData,
-        data: {
-          link: '/#home'
-        }
-      }));
+            data: { link: '/#home' },
+          })
+        );
+      } catch (e) {
+        event.waitUntil(
+          self.registration.showNotification('Notification', {
+            body: pushData,
+            data: { link: '/#home' },
+          })
+        );
+      }
     }
-  } else {
-    console.log('[SW] No data in push event.');
-  }
-});
+  });
 
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-
-  const url = event.notification.data?.link || '/#home';
-
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      for (const client of windowClients) {
-        if (client.url.includes(url) && 'focus' in client) {
-          return client.focus();
+  self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = event.notification.data?.link || '/#home';
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
+        for (const client of clientsArr) {
+          if (client.url.includes(url) && 'focus' in client) return client.focus();
         }
-      }
-      if (clients.openWindow) {
-        return clients.openWindow(url);
-      }
-    })
-  );
+        if (clients.openWindow) return clients.openWindow(url);
+      })
+    );
+  });
+}
+
+self.addEventListener('message', (event) => {
+  const trustedOrigins = [self.location.origin];
+
+  if (!trustedOrigins.includes(event.origin)) {
+    console.warn('🚨 Untrusted message origin:', event.origin);
+    return;
+  }
+
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });

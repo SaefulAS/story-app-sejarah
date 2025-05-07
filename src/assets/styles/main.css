@@ -612,6 +612,42 @@ button:hover {
   }
 }
 
+/* -------------------- Bell Button -------------------- */
+.notification-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  position: relative;
+  width: auto; /* Mengatur ukuran tombol lonceng */
+  margin-right: 20px; /* Menambahkan margin untuk memberi jarak sebelum tombol logout */
+}
+
+.notification-btn .fas.fa-bell {
+  font-size: 20px; /* Mengurangi ukuran ikon lonceng */
+  color: #9e6b34; /* Warna lonceng */
+}
+
+.notification-btn.active .fas.fa-bell {
+  color: #f0c674; /* Ubah warna saat aktif */
+}
+
+.notification-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  display: none;
+}
+
+.notification-btn.active::after {
+  display: block;
+}
+
 /* -------------------- Add Story Page -------------------- */
 .add-story-container {
   display: flex;

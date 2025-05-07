@@ -8,8 +8,6 @@ export default class StoryListPresenter {
     this.currentPage = 1;
     this.stories = [];
     this.filteredStories = [];
-
-    this.init();
   }
 
   async init() {
