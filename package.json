@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "sweetalert": "^2.1.2",
     "sweetalert2": "^11.21.0"
   }
 }

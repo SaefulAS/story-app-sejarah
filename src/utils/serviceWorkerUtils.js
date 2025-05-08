@@ -56,7 +56,7 @@ export async function subscribeToPush() {
 
 export function handleServiceWorkerUpdates() {
   navigator.serviceWorker.ready.then((registration) => {
-    if (registration.waiting && !hasRefreshed) {
+    if (registration.waiting && !serviceWorkerState.hasRefreshed) {
         serviceWorkerState.hasRefreshed = true;
       registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       window.location.reload();
@@ -66,7 +66,7 @@ export function handleServiceWorkerUpdates() {
       const newWorker = registration.installing;
       if (newWorker) {
         newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller && !hasRefreshed) {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller && !serviceWorkerState.hasRefreshed) {
             serviceWorkerState.hasRefreshed = true;
             window.location.reload();
           }
