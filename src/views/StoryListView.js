@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 export default class StoryListView {
   constructor(container) {
     this.container = container;
@@ -170,4 +172,8 @@ export default class StoryListView {
       createButton('→', currentPage === totalPages, () => onPageChange(currentPage + 1))
     );
   }
+  showWarning(title, message) {
+    Swal.fire({ icon: 'warning', title, text: message });
+  }
+  
 }

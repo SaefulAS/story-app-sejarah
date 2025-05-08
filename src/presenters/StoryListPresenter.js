@@ -1,6 +1,5 @@
 import StoryModel from '../models/StoryModel';
 import StoryDetailView from '../views/StoryDetailView';
-import swal from 'sweetalert';
 
 export default class StoryListPresenter {
   constructor(view) {
@@ -49,7 +48,7 @@ export default class StoryListPresenter {
 
   handleMapClick({ lat, lon, name }) {
     if (isNaN(lat) || isNaN(lon)) {
-      swal('Lokasi Tidak Ditemukan', `Cerita dari ${name} tidak memiliki titik lokasi.`, 'warning');
+      this.view.showWarning('Lokasi Tidak Ditemukan', `Cerita dari ${name} tidak memiliki titik lokasi.`);
       return;
     }
 

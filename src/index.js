@@ -1,5 +1,6 @@
 import './assets/styles/main.css';
 import Router from './router';
+import { requestNotificationPermission } from './utils/notification';
 import { subscribeToPush, handleServiceWorkerUpdates, serviceWorkerState } from './utils/serviceWorkerUtils';
 document.addEventListener('DOMContentLoaded', async () => {
   Router();

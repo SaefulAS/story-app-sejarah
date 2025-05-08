@@ -46,7 +46,11 @@ export async function subscribeToPush() {
       }
     }
   } catch (error) {
-    console.error('❌ Error during push subscription:', error);
+    if (error.name === 'AbortError') {
+      console.error('Push registration aborted. Possible cause: blocked by browser or invalid VAPID.');
+    } else {
+      console.error('❌ Unexpected error during push subscription:', error);
+    }
   }
 }
 

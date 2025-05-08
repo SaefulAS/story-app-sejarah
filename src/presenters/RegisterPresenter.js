@@ -1,4 +1,3 @@
-import swal from 'sweetalert';
 import AuthModel from '../models/AuthModel';
 
 export default class RegisterPresenter {
@@ -39,11 +38,10 @@ export default class RegisterPresenter {
 
     try {
       await AuthModel.register(name, email, password);
-      swal('Registrasi Berhasil', 'Silakan masuk dengan akun Anda.', 'success').then(() => {
-        location.hash = 'login';
-      });
+      await this.view.showSuccess('Registrasi Berhasil', 'Silakan masuk dengan akun Anda.');
+      location.hash = 'login';
     } catch (err) {
-      swal('Registrasi Gagal', err.message || 'Terjadi kesalahan. Silakan coba lagi.', 'error');
+      this.view.showError('Registrasi Gagal', err.message || 'Terjadi kesalahan. Silakan coba lagi.');
     } finally {
       this.view.toggleLoading(false);
     }

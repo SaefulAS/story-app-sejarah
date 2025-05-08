@@ -1,5 +1,4 @@
 import AuthModel from '../models/AuthModel';
-import swal from 'sweetalert';
 
 export default class LoginPresenter {
   constructor(view) {
@@ -33,10 +32,10 @@ export default class LoginPresenter {
 
     try {
       const result = await AuthModel.login(email, password);
-      await swal('Berhasil Masuk', `Selamat datang, ${result.name}!`, 'success');
+      await this.view.showSuccess('Berhasil Masuk', `Selamat datang, ${result.name}!`);
       location.hash = 'home';
     } catch (err) {
-      swal('Gagal Masuk', err.message || 'Email atau kata sandi salah.', 'error');
+      this.view.showError('Gagal Masuk', err.message || 'Email atau kata sandi salah.');
     } finally {
       this.view.toggleLoading(false);
     }

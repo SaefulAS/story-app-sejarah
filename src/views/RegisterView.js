@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 export default class RegisterView {
   constructor(container) {
     this.container = container;
@@ -5,45 +7,39 @@ export default class RegisterView {
 
   render() {
     this.container.innerHTML = `
-        <div class="auth-fullscreen">
-          <div class="auth-card">
-            <div class="auth-branding">
-              <h1 class="site-title">Titik Sejarah</h1>
-              <p class="site-tagline">Menjelajah Jejak Sejarah Indonesia</p>
-            </div>
-            <div class="login-card" id="register-skip" tabindex="-1">
-              <h2>Buat Akun Baru</h2>
-              <p class="login-subtext">Daftar untuk memulai petualanganmu</p>
-              <form id="register-form">
-                <div class="form-group">
-                  <label for="name" class="sr-only">Nama Lengkap</label>
-                  <input type="text" id="name" placeholder="Nama Lengkap" required aria-describedby="name-error" />
-                  <small id="name-error" class="error-message" aria-live="polite"></small>
-                </div>
-                <div class="form-group">
-                  <label for="email" class="sr-only">Alamat Email</label>
-                  <input type="email" id="email" placeholder="Alamat Email" required aria-describedby="email-error" />
-                  <small id="email-error" class="error-message" aria-live="polite"></small>
-                </div>
-                <div class="form-group password-wrapper">
+      <div class="auth-fullscreen">
+        <div class="auth-card">
+          <div class="auth-branding">
+            <h1 class="site-title">Titik Sejarah</h1>
+            <p class="site-tagline">Menjelajah Jejak Sejarah Indonesia</p>
+          </div>
+          <div class="login-card" id="register-skip" tabindex="-1">
+            <h2>Buat Akun Baru</h2>
+            <p class="login-subtext">Daftar untuk memulai petualanganmu</p>
+            <form id="register-form">
+              <div class="form-group">
+                <label for="name" class="sr-only">Nama Lengkap</label>
+                <input type="text" id="name" placeholder="Nama Lengkap" required aria-describedby="name-error" />
+                <small id="name-error" class="error-message" aria-live="polite"></small>
+              </div>
+              <div class="form-group">
+                <label for="email" class="sr-only">Alamat Email</label>
+                <input type="email" id="email" placeholder="Alamat Email" required aria-describedby="email-error" />
+                <small id="email-error" class="error-message" aria-live="polite"></small>
+              </div>
+              <div class="form-group password-wrapper">
                 <label for="password" class="sr-only">Kata Sandi</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Kata Sandi"
-                    required
-                    aria-describedby="password-error"
-                />
+                <input type="password" id="password" placeholder="Kata Sandi" required aria-describedby="password-error" />
                 <span id="toggle-password" class="toggle-eye" data-visible="false">🙈</span>
                 <small id="password-error" class="error-message" aria-live="polite"></small>
-                </div>
-                <button type="submit">Daftar</button>
-              </form>
-              <a href="#login">Sudah punya akun? Masuk</a>
-            </div>
+              </div>
+              <button type="submit">Daftar</button>
+            </form>
+            <a href="#login">Sudah punya akun? Masuk</a>
           </div>
         </div>
-      `;
+      </div>
+    `;
   }
 
   getFormValues() {
@@ -102,5 +98,13 @@ export default class RegisterView {
       toggle.textContent = isVisible ? '🙈' : '👁️';
       toggle.setAttribute('data-visible', String(!isVisible));
     });
+  }
+
+  showSuccess(title, message) {
+    return Swal.fire({ icon: 'success', title, text: message });
+  }
+
+  showError(title, message) {
+    return Swal.fire({ icon: 'error', title, text: message });
   }
 }
