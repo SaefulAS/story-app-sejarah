@@ -19,22 +19,44 @@ export function openDB() {
 
 export async function setFlag(key, value) {
   const db = await openDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  tx.objectStore(STORE_NAME).put(value, key);
-  return tx.complete;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const request = store.put(value, key);
+
+    request.onsuccess = () => resolve(true);
+    request.onerror = () => reject('❌ Failed to write flag');
+  });
 }
 
 export async function getFlag(key) {
   const db = await openDB();
-  const tx = db.transaction(STORE_NAME, 'readonly');
-  return tx.objectStore(STORE_NAME).get(key);
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const request = store.get(key);
+
+    request.onsuccess = () => resolve(request.result ?? false);
+    request.onerror = () => reject('❌ Failed to read flag');
+  });
 }
 
 export async function clearFlag(key) {
   const db = await openDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  tx.objectStore(STORE_NAME).delete(key);
-  return tx.complete;
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('flags', 'readwrite');
+    const store = tx.objectStore('flags');
+    const request = store.delete(key);
+
+    request.onsuccess = () => {
+      console.log(`🧹 Flag '${key}' deleted from IndexedDB`);
+      resolve(true);
+    };
+    request.onerror = (e) => {
+      console.error(`❌ Failed to delete flag '${key}'`, e);
+      reject(e);
+    };
+  });
 }
 
 export async function cacheStories(stories, key = 'cachedStories') {

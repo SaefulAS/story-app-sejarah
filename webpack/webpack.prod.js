@@ -27,7 +27,7 @@ module.exports = {
     }),
     new Dotenv(),
     new InjectManifest({
-      swSrc: './src/webpush-sw.js',
+      swSrc: './src/webpush-sw.prod.js',
       swDest: 'webpush-sw.js',
     }),
     new CopyPlugin({

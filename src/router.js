@@ -2,6 +2,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AddStoryPage from './pages/AddStoryPage';
+import { initNotificationButton } from './utils/initNotification';
 
 const routes = {
   login: LoginPage,
@@ -34,6 +35,9 @@ export default function Router() {
 
     if (routes[hash]) {
       routes[hash](app);
+      setTimeout(() => {
+        initNotificationButton();
+      }, 0);
     } else {
       location.hash = '/login';
     }

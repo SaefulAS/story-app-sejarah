@@ -1,5 +1,6 @@
 import StoryModel from '../models/StoryModel';
 import { getFlag, setFlag } from '../utils/db';
+import { serviceWorkerState } from '../utils/serviceWorkerUtils';
 
 export default class AddStoryPresenter {
   constructor(view) {
@@ -102,6 +103,12 @@ export default class AddStoryPresenter {
   async sendPushNotification(desc) {
     try {
       const alreadyNotified = await getFlag('notified');
+  
+      if (!serviceWorkerState.isSubscribed) {
+        console.log("⚠️ Notifikasi tidak dikirim karena belum subscribe.");
+        return;
+      }
+  
       if (!alreadyNotified) {
         await setFlag('notified', true);
         const reg = await navigator.serviceWorker.ready;
@@ -111,6 +118,9 @@ export default class AddStoryPresenter {
           tag: 'story-created',
           renotify: false,
         });
+        console.log('📢 Notifikasi berhasil dikirim.');
+      } else {
+        console.log('🔕 Sudah pernah menampilkan notifikasi, dilewati.');
       }
     } catch (err) {
       console.error('❌ Gagal menampilkan notifikasi:', err);
