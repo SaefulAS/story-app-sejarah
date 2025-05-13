@@ -1,36 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sejarah App</title>
+
+    <title>Titik Sejarah Indonesia</title>
+
+    <!-- 🔗 PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- 🎨 Theme Color -->
+    <meta name="theme-color" content="#9e6b34" />
+
+    <!-- 📱 Apple PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Titik Sejarah Indonesia" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+
+    <!-- 🔍 Favicon -->
     <link rel="icon" href="/favicon.ico" />
+
+    <!-- 🖋️ Fonts and AOS -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-    <link
-      href="https://unpkg.com/aos@2.3.4/dist/aos.css"
-      rel="stylesheet"
-    />
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   </head>
 
   <body>
+    <!-- ♿ Skip to Main Content -->
     <a href="#" class="skip-link" id="skip-link">Lewati ke Konten Utama</a>
 
+    <!-- 🔰 Branding -->
     <header id="branding"></header>
 
+    <!-- 📦 App Content -->
     <main id="main-content" tabindex="-1">
       <div id="app"></div>
     </main>
 
+    <!-- 🔚 Footer -->
     <footer></footer>
 
+    <!-- 🔁 AOS Animation Init -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
       AOS.init({
         duration: 800,
-        once: true
+        once: true,
       });
     </script>
   </body>

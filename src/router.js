@@ -2,6 +2,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import AddStoryPage from './pages/AddStoryPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { initNotificationButton } from './utils/initNotification';
 
 const routes = {
@@ -33,13 +34,13 @@ export default function Router() {
       return;
     }
 
-    if (routes[hash]) {
+     if (routes[hash]) {
       routes[hash](app);
       setTimeout(() => {
         initNotificationButton();
       }, 0);
     } else {
-      location.hash = '/login';
+      NotFoundPage(app);
     }
   };
 
