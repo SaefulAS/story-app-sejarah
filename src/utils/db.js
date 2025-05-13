@@ -49,7 +49,6 @@ export async function clearFlag(key) {
     const request = store.delete(key);
 
     request.onsuccess = () => {
-      console.log(`🧹 Flag '${key}' deleted from IndexedDB`);
       resolve(true);
     };
     request.onerror = (e) => {

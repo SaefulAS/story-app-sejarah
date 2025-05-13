@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     await navigator.serviceWorker.register(swFile);
-    console.log(`🔧 Registered ${swFile}`);
   } catch (err) {
     console.error('❌ Failed to register SW:', err);
   }

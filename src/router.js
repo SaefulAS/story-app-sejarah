@@ -24,17 +24,17 @@ export default function Router() {
   const renderPage = () => {
     app.innerHTML = '';
 
-    if (!token && hash !== 'register' && hash !== 'login' && hash !== '') {
+    if (!token && hash !== 'register' && hash !== 'login') {
       location.hash = '/login';
       return;
     }
 
-    if (token && (hash === '' || hash === 'login')) {
+    if (token && hash === '') {
       location.hash = '/home';
       return;
     }
 
-     if (routes[hash]) {
+    if (routes[hash]) {
       routes[hash](app);
       setTimeout(() => {
         initNotificationButton();

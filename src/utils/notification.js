@@ -2,13 +2,13 @@ export async function requestNotificationPermission() {
   const result = await Notification.requestPermission();
   switch (result) {
     case 'denied':
-      console.log('Notification permission denied.');
+      console.info('Notification permission denied.');
       break;
     case 'default':
-      console.log('Notification permission default action.');
+      console.info('Notification permission default action.');
       break;
     case 'granted':
-      console.log('Notification permission granted.');
+      console.info('Notification permission granted.');
       break;
   }
 }
@@ -50,8 +50,6 @@ export async function sendSubscriptionToBackend(subscription) {
     const data = await response.json();
     if (data.error) {
       console.error('Failed to subscribe to notifications:', data.message);
-    } else {
-      console.log('Successfully subscribed to notifications:', data);
     }
   } catch (error) {
     console.error('Error sending subscription to backend:', error);

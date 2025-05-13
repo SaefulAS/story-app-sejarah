@@ -105,7 +105,6 @@ export default class AddStoryPresenter {
       const alreadyNotified = await getFlag('notified');
   
       if (!serviceWorkerState.isSubscribed) {
-        console.log("⚠️ Notifikasi tidak dikirim karena belum subscribe.");
         return;
       }
   
@@ -118,9 +117,6 @@ export default class AddStoryPresenter {
           tag: 'story-created',
           renotify: false,
         });
-        console.log('📢 Notifikasi berhasil dikirim.');
-      } else {
-        console.log('🔕 Sudah pernah menampilkan notifikasi, dilewati.');
       }
     } catch (err) {
       console.error('❌ Gagal menampilkan notifikasi:', err);

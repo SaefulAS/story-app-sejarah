@@ -20,9 +20,7 @@ export async function initNotificationButton() {
     notificationBtn.classList.remove('active');
   }
 
-  console.log('🔔 Notification button found');
   notificationBtn.addEventListener('click', async () => {
-    console.log('🔔 Notification button clicked');
     await subscribeToPush();
     notificationBtn.classList.toggle('active', serviceWorkerState.isSubscribed);
   });

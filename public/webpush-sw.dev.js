@@ -5,8 +5,6 @@ if (!workbox) {
 } else {
   workbox.setConfig({ debug: false });
 
-  console.log('🧪 Dev SW aktif');
-
   const url = new URL(self.location.href);
   if (url.port !== '7878') {
     console.warn('❌ SW not allowed on this port:', url.port);

@@ -25,7 +25,6 @@ export async function subscribeToPush() {
         body: JSON.stringify({ endpoint: existingSubscription.endpoint }),
       });
       await clearFlag('subscribed');
-      console.log('❌ Unsubscribed from push notifications');
       serviceWorkerState.isSubscribed = false;
     } else {
       const subscription = await registration.pushManager.subscribe({
@@ -36,7 +35,6 @@ export async function subscribeToPush() {
       if (subscription?.getKey('p256dh') && subscription?.getKey('auth')) {
         await sendSubscriptionToBackend(subscription);
         await setFlag('subscribed', true);
-        console.log('✅ Subscribed to push notifications');
         serviceWorkerState.isSubscribed = true;
       } else {
         console.error('❌ Subscription keys are missing.');
@@ -78,7 +76,7 @@ export function handleServiceWorkerUpdates() {
         const port = new URL(registration.scope).port;
         if (port !== '7878') {
           registration.unregister().then(() => {
-            console.log(`🧹 Unregistered SW from port ${port}`);
+            console.warn(`🧹 Unregistered SW from port ${port}`);
           });
         }
       });

@@ -31,7 +31,15 @@ module.exports = {
       swDest: 'webpush-sw.js',
     }),
     new CopyPlugin({
-      patterns: [{ from: 'public/offline.html', to: '' }],
+      patterns: [
+        {
+          from: 'public',
+          to: '.',
+          globOptions: {
+            ignore: ['**/index.html'],
+          },
+        },
+      ],
     }),
   ],
   module: {
