@@ -78,7 +78,7 @@ export async function renderLeafletMap(containerId = 'map') {
 
   try {
     stories = await StoryModel.getStoriesWithLocation();
-    await cacheStories(stories);
+    await cacheStories(stories, 'cachedStoriesWithLocation');
   } catch (err) {
     console.warn('⚠️ Gagal fetch dari API:', err.message);
     const cached = await getCachedStories('cachedStoriesWithLocation');
