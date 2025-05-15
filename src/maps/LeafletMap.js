@@ -88,7 +88,7 @@ export async function renderLeafletMap(containerId = 'map') {
       console.error('🛑 Tidak ada cache stories tersedia.');
       return;
     }
-  }  
+  }
 
   const markerMap = new Map();
 

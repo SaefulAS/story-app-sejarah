@@ -12,12 +12,9 @@ if (url.port !== '7878') {
   self.skipWaiting();
   self.close();
 } else {
-
   registerRoute(
     ({ request, url }) =>
-      request.mode === 'navigate' ||
-      url.pathname === '/' ||
-      url.hash.startsWith('#'), 
+      request.mode === 'navigate' || url.pathname === '/' || url.hash.startsWith('#'),
     async ({ event }) => {
       try {
         return await fetch(event.request);
@@ -45,8 +42,7 @@ if (url.port !== '7878') {
   // 📷 Cache gambar dari story-api (Dicoding)
   workbox.routing.registerRoute(
     ({ url }) =>
-      url.origin === 'https://story-api.dicoding.dev' &&
-      url.pathname.startsWith('/v1/stories'),
+      url.origin === 'https://story-api.dicoding.dev' && url.pathname.startsWith('/v1/stories'),
     new workbox.strategies.NetworkFirst({
       cacheName: 'dicoding-story-api-cache',
       plugins: [
@@ -62,9 +58,7 @@ if (url.port !== '7878') {
   );
 
   registerRoute(
-    ({ url }) =>
-      url.origin === self.location.origin &&
-      url.pathname.startsWith('/stories'),
+    ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/stories'),
     new NetworkFirst({
       cacheName: 'stories-api-cache',
       plugins: [

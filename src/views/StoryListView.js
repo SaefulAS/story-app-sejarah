@@ -175,5 +175,4 @@ export default class StoryListView {
   showWarning(title, message) {
     Swal.fire({ icon: 'warning', title, text: message });
   }
-  
 }

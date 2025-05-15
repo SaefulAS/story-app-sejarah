@@ -48,7 +48,10 @@ export default class StoryListPresenter {
 
   handleMapClick({ lat, lon, name }) {
     if (isNaN(lat) || isNaN(lon)) {
-      this.view.showWarning('Lokasi Tidak Ditemukan', `Cerita dari ${name} tidak memiliki titik lokasi.`);
+      this.view.showWarning(
+        'Lokasi Tidak Ditemukan',
+        `Cerita dari ${name} tidak memiliki titik lokasi.`
+      );
       return;
     }
 

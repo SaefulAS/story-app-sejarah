@@ -41,7 +41,10 @@ export default class RegisterPresenter {
       await this.view.showSuccess('Registrasi Berhasil', 'Silakan masuk dengan akun Anda.');
       location.hash = 'login';
     } catch (err) {
-      this.view.showError('Registrasi Gagal', err.message || 'Terjadi kesalahan. Silakan coba lagi.');
+      this.view.showError(
+        'Registrasi Gagal',
+        err.message || 'Terjadi kesalahan. Silakan coba lagi.'
+      );
     } finally {
       this.view.toggleLoading(false);
     }

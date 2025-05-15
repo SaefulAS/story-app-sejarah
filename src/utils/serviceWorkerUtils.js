@@ -1,6 +1,6 @@
 import { urlBase64ToUint8Array } from './urlBase64ToUint8Array';
 import { sendSubscriptionToBackend } from './notification';
-import { setFlag,getFlag, clearFlag } from './db';
+import { setFlag, getFlag, clearFlag } from './db';
 
 export const serviceWorkerState = {
   isSubscribed: false,
