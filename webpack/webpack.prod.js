@@ -12,6 +12,7 @@ module.exports = {
   output: {
     filename: 'bundle.[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
+    publicPath: '/story-app-sejarah/',
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -21,6 +22,7 @@ module.exports = {
         collapseWhitespace: true,
         removeComments: true,
       },
+      publicPath: '/story-app-sejarah/',
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',

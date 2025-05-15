@@ -10,7 +10,6 @@ const url = new URL(self.location.href);
 if (url.port !== '7878') {
   console.warn('❌ SW not allowed on this port:', url.port);
   self.skipWaiting();
-  self.close();
 } else {
   registerRoute(
     ({ request, url }) =>

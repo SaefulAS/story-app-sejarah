@@ -4,7 +4,11 @@ import { requestNotificationPermission } from './utils/notification';
 import { handleServiceWorkerUpdates } from './utils/serviceWorkerUtils';
 import { handleSkipLink } from './utils/skipLink';
 document.addEventListener('DOMContentLoaded', async () => {
-  const swFile = process.env.NODE_ENV === 'development' ? '/webpush-sw.dev.js' : '/webpush-sw.js';
+  const swFile =
+    process.env.NODE_ENV === 'development'
+      ? '/webpush-sw.dev.js'
+      : `${process.env.PUBLIC_URL}/webpush-sw.js`;
+console.log('Register service worker at:', swFile);
 
   try {
     await navigator.serviceWorker.register(swFile);
