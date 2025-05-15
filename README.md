@@ -1,2 +1,1 @@
-# story-app-sejarah
-Submission 2 Story App titik sejarah
+# story-app-sejarahStory App titik sejarah
