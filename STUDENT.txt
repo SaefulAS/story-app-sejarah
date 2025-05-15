@@ -1,0 +1,2 @@
+Web Deploy = https://SaefulAS.github.io/story-app-sejarah
+github = https://github.com/SaefulAS/story-app-sejarah
