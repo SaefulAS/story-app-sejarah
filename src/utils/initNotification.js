@@ -1,9 +1,5 @@
 import { getFlag } from './db';
-import {
-  subscribeToPush,
-  serviceWorkerState,
-  syncSubscriptionState,
-} from './serviceWorkerUtils';
+import { subscribeToPush, serviceWorkerState, syncSubscriptionState } from './serviceWorkerUtils';
 
 export async function initNotificationButton() {
   const notificationBtn = document.getElementById('notification-btn');

@@ -84,19 +84,20 @@ export default class AddStoryView {
 
   on(event, handler) {
     const el = this.getElements();
-    if (event === 'submit') el.form.addEventListener('submit', e => {
-      e.preventDefault(); handler();
-    });
+    if (event === 'submit')
+      el.form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handler();
+      });
     else if (event === 'cancel') el.cancelBtn.addEventListener('click', handler);
     else if (event === 'methodChange') {
-      el.radioButtons.forEach(radio => {
+      el.radioButtons.forEach((radio) => {
         radio.addEventListener('change', () => {
           const selected = document.querySelector('input[name="upload-method"]:checked').value;
           handler(selected);
         });
       });
-    }
-    else if (event === 'capture') el.captureBtn.addEventListener('click', handler);
+    } else if (event === 'capture') el.captureBtn.addEventListener('click', handler);
     else if (event === 'retake') el.retakeBtn.addEventListener('click', handler);
   }
 
@@ -153,7 +154,7 @@ export default class AddStoryView {
     el.canvas.width = el.camera.videoWidth;
     el.canvas.height = el.camera.videoHeight;
     ctx.drawImage(el.camera, 0, 0, el.canvas.width, el.canvas.height);
-    el.canvas.toBlob(blob => {
+    el.canvas.toBlob((blob) => {
       const url = URL.createObjectURL(blob);
       callback(blob, url);
     }, 'image/jpeg');
@@ -191,7 +192,7 @@ export default class AddStoryView {
       showCancelButton: true,
       confirmButtonText: 'Ya',
       cancelButtonText: 'Tidak',
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) callback();
     });
   }
@@ -209,7 +210,7 @@ export default class AddStoryView {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
     }).addTo(map);
-  
+
     const markerIcon = L.divIcon({
       html: `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
@@ -228,24 +229,24 @@ export default class AddStoryView {
       iconSize: [32, 42],
       iconAnchor: [16, 42],
     });
-  
+
     let marker = null;
-  
+
     map.on('click', (e) => {
       const { lat, lng } = e.latlng;
-  
+
       if (!marker) {
         marker = L.marker([lat, lng], { draggable: true, icon: markerIcon }).addTo(map);
       } else {
         marker.setLatLng([lat, lng]);
       }
-  
+
       onClickHandler(lat, lng);
-  
+
       marker.on('dragend', (event) => {
         const { lat, lng } = event.target.getLatLng();
         onClickHandler(lat, lng);
       });
     });
-  }  
+  }
 }

@@ -1,4 +1,4 @@
-const DB_NAME = 'notification-db';
+const DB_NAME = 'story-sejarah-db';
 const DB_VERSION = 1;
 const STORE_NAME = 'flags';
 

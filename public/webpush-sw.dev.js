@@ -38,13 +38,15 @@ if (!workbox) {
   workbox.routing.registerRoute(
     ({ url }) =>
       url.origin === 'https://story-api.dicoding.dev' &&
-      url.pathname.startsWith('/images/stories/'),
-    new workbox.strategies.CacheFirst({
-      cacheName: 'dicoding-story-images',
+      url.pathname.startsWith('/v1/stories'),
+    new workbox.strategies.NetworkFirst({
+      cacheName: 'dicoding-story-api-cache',
       plugins: [
-        new workbox.cacheableResponse.CacheableResponsePlugin({ statuses: [0, 200] }),
+        new workbox.cacheableResponse.CacheableResponsePlugin({
+          statuses: [0, 200],
+        }),
         new workbox.expiration.ExpirationPlugin({
-          maxEntries: 100,
+          maxEntries: 50,
           maxAgeSeconds: 60 * 60 * 24 * 30,
         }),
       ],

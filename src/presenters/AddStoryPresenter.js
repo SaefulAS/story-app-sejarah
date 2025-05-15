@@ -35,8 +35,9 @@ export default class AddStoryPresenter {
     } else {
       this.view.hideFileUpload();
       this.view.showCamera();
-      this.view.startCamera()
-        .then(stream => {
+      this.view
+        .startCamera()
+        .then((stream) => {
           this.videoStream = stream;
           this.view.attachStreamToCamera(stream);
         })
@@ -60,7 +61,7 @@ export default class AddStoryPresenter {
 
   stopCamera() {
     if (this.videoStream) {
-      this.videoStream.getTracks().forEach(track => track.stop());
+      this.videoStream.getTracks().forEach((track) => track.stop());
       this.videoStream = null;
     }
   }
@@ -103,11 +104,11 @@ export default class AddStoryPresenter {
   async sendPushNotification(desc) {
     try {
       const alreadyNotified = await getFlag('notified');
-  
+
       if (!serviceWorkerState.isSubscribed) {
         return;
       }
-  
+
       if (!alreadyNotified) {
         await setFlag('notified', true);
         const reg = await navigator.serviceWorker.ready;

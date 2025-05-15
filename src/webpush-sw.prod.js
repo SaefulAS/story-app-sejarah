@@ -12,12 +12,9 @@ if (url.port !== '7878') {
   self.skipWaiting();
   self.close();
 } else {
-
   registerRoute(
     ({ request, url }) =>
-      request.mode === 'navigate' ||
-      url.pathname === '/' ||
-      url.hash.startsWith('#'), 
+      request.mode === 'navigate' || url.pathname === '/' || url.hash.startsWith('#'),
     async ({ event }) => {
       try {
         return await fetch(event.request);
@@ -43,23 +40,25 @@ if (url.port !== '7878') {
   );
 
   // 📷 Cache gambar dari story-api (Dicoding)
-  registerRoute(
+  workbox.routing.registerRoute(
     ({ url }) =>
-      url.origin === 'https://story-api.dicoding.dev' &&
-      url.pathname.startsWith('/images/stories/'),
-    new CacheFirst({
-      cacheName: 'dicoding-story-images',
+      url.origin === 'https://story-api.dicoding.dev' && url.pathname.startsWith('/v1/stories'),
+    new workbox.strategies.NetworkFirst({
+      cacheName: 'dicoding-story-api-cache',
       plugins: [
-        new CacheableResponsePlugin({ statuses: [0, 200] }),
-        new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }),
+        new workbox.cacheableResponse.CacheableResponsePlugin({
+          statuses: [0, 200],
+        }),
+        new workbox.expiration.ExpirationPlugin({
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        }),
       ],
     })
   );
 
   registerRoute(
-    ({ url }) =>
-      url.origin === self.location.origin &&
-      url.pathname.startsWith('/stories'),
+    ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/stories'),
     new NetworkFirst({
       cacheName: 'stories-api-cache',
       plugins: [
